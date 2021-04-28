@@ -49,11 +49,8 @@ pair<Mat, vector<pair<float, float>>> orientation(Mat src, int size, int* SP, in
 
 	//Gradiants x and y
 	Mat grad_x, grad_y;
-	//imshow("inputImage", inputImage);
 	Sobel(inputImage, grad_x, inputImage.depth(), 1, 0, 3);
 	Sobel(inputImage, grad_y, inputImage.depth(), 0, 1, 3);
-	/*  imshow("grad_x", grad_x);
-	  imshow("grad_y", grad_y);*/
 	Mat Fx(inputImage.size(), inputImage.type()),
 		Fy(inputImage.size(), inputImage.type()),
 		Fx_gauss,
@@ -78,7 +75,7 @@ pair<Mat, vector<pair<float, float>>> orientation(Mat src, int size, int* SP, in
 			blockH = ((height - i) < blockSize) ? (height - i) : blockSize;
 			blockW = ((width - j) < blockSize) ? (width - j) : blockSize;
 
-			//average at block W¬çW
+			//average at block WÑ…W
 			for (int u = i; u < i + blockH; u++) {
 				for (int v = j; v < j + blockW; v++) {
 					Gsx += (grad_x.at<float>(u, v) * grad_x.at<float>(u, v)) - (grad_y.at<float>(u, v) * grad_y.at<float>(u, v));
@@ -109,8 +106,6 @@ pair<Mat, vector<pair<float, float>>> orientation(Mat src, int size, int* SP, in
 
 	GaussianBlur(Fx, Fx_gauss, Size(5, 5), 1, 1);
 	GaussianBlur(Fy, Fy_gauss, Size(5, 5), 1, 1);
-	//imshow("Fx_gauss", Fx_gauss);
-	//imshow("Fy_gauss", Fy_gauss);
 	vector<vector<float>> vec_gradgrad(height, vector<float>(width, 0.0f));
 	for (int m = 0; m < height; m++) {
 		for (int n = 0; n < width; n++) {
@@ -127,7 +122,7 @@ pair<Mat, vector<pair<float, float>>> orientation(Mat src, int size, int* SP, in
 
 				float gradgrad = grad;
 
-				// 4°³·Î qusntazation
+				// 4ê°œë¡œ qusntazation
 				if (2.0f <= gradgrad)
 					gradgrad = FLT_MAX;
 				else if (0.5f <= gradgrad && gradgrad < 2.0f)
@@ -189,7 +184,7 @@ Mat gabor(Mat src, vector<pair<float, float>>& vec, int block_size) {
 			float dx = vec[index].first;
 			float dy = vec[index].second;
 
-			// ÇØ´ç BlockÀÇ ¹æÇâ´ë·Î theta¸¦ ¼³Á¤ÇØÁÜ
+			// í•´ë‹¹ Blockì˜ ë°©í–¥ëŒ€ë¡œ thetaë¥¼ ì„¤ì •í•´ì¤Œ
 			theta = atan2f(dy, dx) + CV_PI / 2;
 
 			Mat temp;
@@ -202,7 +197,7 @@ Mat gabor(Mat src, vector<pair<float, float>>& vec, int block_size) {
 			if (height < m + block_size - 1 && temp_size >(height - 1) - m)
 				temp_size = (height - 1) - m;
 
-			// ÇØ´ç block¸¸ ÀÌ¹ÌÁö¸¦ ÀúÀå
+			// í•´ë‹¹ blockë§Œ ì´ë¯¸ì§€ë¥¼ ì €ì¥
 			for (int i = 0; i < height; i++) {
 				for (int j = 0; j < width; j++) {
 					if (m <= i && i <= m + temp_size && n <= j && j <= n + temp_size)
@@ -287,14 +282,9 @@ void find_other_maniture(Mat& color, Mat& imgt, int& endingcheck, int& bifcheck,
 		for (int x = 1; x < imgt.cols - 1; x = x + 1)
 		{
 
-			if ((x % 14) == 0 && (y % 14) == 0)ind++;///blocksize*2±âÁØÀ¸·Î ±â¿ï±â indexÁ¶Á¤ Áö±İ ÀÌ¹ÌÁö »çÀÌÁî°¡ 2¹è¶ó¼­ ±×·³
-		  /*   cout << ind << " " << y << " " << x << endl;*/
-
+			if ((x % 14) == 0 && (y % 14) == 0)ind++;///blocksize*2ê¸°ì¤€ìœ¼ë¡œ ê¸°ìš¸ê¸° indexì¡°ì • ì§€ê¸ˆ ì´ë¯¸ì§€ ì‚¬ì´ì¦ˆê°€ 2ë°°ë¼ì„œ ê·¸ëŸ¼
 			if (SP > 49)break;
 			if (ind >= vec.size())break;
-
-
-
 			int save1 = imgt.at<uchar>(y - 1, x - 1);
 			int save2 = imgt.at<uchar>(y - 1, x);
 			int save3 = imgt.at<uchar>(y - 1, x + 1);
@@ -359,7 +349,7 @@ void find_other_maniture(Mat& color, Mat& imgt, int& endingcheck, int& bifcheck,
 
 			float dx = vec[ind].first;
 			float dy = vec[ind].second;
-			/*    ÇØ´ç BlockÀÇ ¹æÇâ´ë·Î theta¸¦ ¼³Á¤ÇØÁÜ*/
+			/*    í•´ë‹¹ Blockì˜ ë°©í–¥ëŒ€ë¡œ thetaë¥¼ ì„¤ì •í•´ì¤Œ*/
 			float s1 = dy / (dx + FLT_EPSILON);
 			unsigned char num;
 			if (s1 == 0)num = 0;
@@ -467,7 +457,7 @@ pair<Mat, vector<pair<float, float>>> find_core_delta(Mat src, int size, int SP,
 			blockH = ((height - i) < blockSize) ? (height - i) : blockSize;
 			blockW = ((width - j) < blockSize) ? (width - j) : blockSize;
 
-			//average at block W¬çW
+			//average at block WÑ…W
 			for (int u = i; u < i + blockH; u++) {
 				for (int v = j; v < j + blockW; v++) {
 					Gsx += (grad_x.at<float>(u, v) * grad_x.at<float>(u, v)) - (grad_y.at<float>(u, v) * grad_y.at<float>(u, v));
@@ -612,7 +602,7 @@ pair<Mat, vector<pair<float, float>>> find_core_delta(Mat src, int size, int SP,
 				int cnt_core = up_side + down_up;
 				int cnt_delta = up_up + down_side;
 
-				// Â÷ÀÌ°¡ 2 ³Ñ´Â °æ¿ì¸¸ push, ÄÚ¾î°¡ ´õ ¸¹À¸¸é ÄÚ¾î, µ¨Å¸°¡ ´õ ¸¹À¸¸é µ¨Å¸
+				// ì°¨ì´ê°€ 2 ë„˜ëŠ” ê²½ìš°ë§Œ push, ì½”ì–´ê°€ ë” ë§ìœ¼ë©´ ì½”ì–´, ë¸íƒ€ê°€ ë” ë§ìœ¼ë©´ ë¸íƒ€
 				if (abs(cnt_delta - cnt_core) > 2) {
 					if (cnt_delta <= cnt_core) {
 						pq_core.push({ cnt_core - cnt_delta,{ m, n } });
@@ -752,9 +742,9 @@ int main() {
 	dilate(show, dil, Mat(), Point(-1, -1));
 	erode(show, ero, Mat(), Point(-1, -1));
 	Mat open, res;
-	open = dil - ero;//°ËÀº»ö Èò»öÀÌ ¹İÀüµÇ¾î ÀÖ¾î¼­ dil-ero¸¦ ÇØ¾ß opening È¿°ú ³¿
-	erode(open, ero, Mat(), Point(-1, -1));//openingÇÑ°É Ä§½Ä
-	dilate(open, dil, Mat(), Point(-1, -1));//openingÇÑ°É ÆØÃ¢
+	open = dil - ero;//ê²€ì€ìƒ‰ í°ìƒ‰ì´ ë°˜ì „ë˜ì–´ ìˆì–´ì„œ dil-eroë¥¼ í•´ì•¼ opening íš¨ê³¼ ëƒ„
+	erode(open, ero, Mat(), Point(-1, -1));//openingí•œê±¸ ì¹¨ì‹
+	dilate(open, dil, Mat(), Point(-1, -1));//openingí•œê±¸ íŒ½ì°½
 
 	res = dil - ero;
 
@@ -772,16 +762,11 @@ int main() {
 	Mat segmented2 = segmentation(src, segmented);
 	Mat plus;
 	threshold(segmented, plus, 127, 255, THRESH_BINARY_INV);
-	Mat gabored = gabor(res, vec, block_size) - plus;//ÅÂµÎ¸® ³ëÀÌÁî Á¦°Å
+	Mat gabored = gabor(res, vec, block_size) - plus;//íƒœë‘ë¦¬ ë…¸ì´ì¦ˆ ì œê±°
 	pyrUp(src, src);
-	//imshow("input", src);
 	pyrUp(show, show);
-	//imshow("normalized", show);
 	pyrUp(segmented2, segmented2);
-	//imshow("segmented area", segmented2);
 	pyrUp(orientationmap, orientationmap);
-	//imshow("Orientation", orientationmap);
-
 	pair<Mat, vector<pair<float, float>>> returned2 = find_core_delta(gabored, block_size, SP, X, Y, O, T, core_check, delta_check);
 	Mat find_single = returned2.first;
 	M = SP;
@@ -790,9 +775,6 @@ int main() {
 	Mat gabored_end;
 
 	threshold(gabored, gabored_end, 1, 255, THRESH_BINARY_INV);
-	//imshow("gabored", gabored);
-
-	//imshow("binary", gabored_end);
 	//// thinning
 	Mat imgt = thinning(gabored);
 	threshold(gabored_end, gabored_end, 1, 255, THRESH_BINARY_INV);
@@ -809,7 +791,6 @@ int main() {
 	int endingcheck = 0;
 	find_other_maniture(color, imgt, endingcheck, bifcheck, SP, X, Y, O, T, vec);
 	imshow("result", color);
-	//imshow("result_thin", imgt);
 	cout << "ending : " << endingcheck << endl;
 	cout << "bif : " << bifcheck << endl;
 	cout << "core :" << core_check << endl;
